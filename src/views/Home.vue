@@ -1,18 +1,37 @@
 <template>
   <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <h2>Lista de tareas</h2>
+    <hr />
+    <router-link to="/agregar">
+      <button class="btn btn-success btn-block">Agregar</button>
+    </router-link>
+    <ul class="list-group mt-3">
+      <li class="list-group-item" v-for="(item, index) in tareas" :key="index">
+        {{ item.nombre }} - {{ item.id }}
+        <div class="float-right">
+          <router-link
+            class="btn btn-warning btn-sm mr-2"
+            :to="{name:'Editar', params: {id: item.id}}"
+          >Editar</router-link>
+          <button class="btn btn-danger btn-sm" @click="eliminarTarea(item.id)">Eliminar</button>
+        </div>
+      </li>
+    </ul>
   </div>
 </template>
 
 <script>
-// @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
-
+import { mapState, mapActions } from "vuex";
 export default {
-  name: 'Home',
-  components: {
-    HelloWorld
-  }
-}
+  name: "Home",
+  created() {
+    this.getTareas();
+  },
+  computed: {
+    ...mapState(["tareas"]),
+  },
+  methods: {
+    ...mapActions(["getTareas", "eliminarTarea"]),
+  },
+};
 </script>
